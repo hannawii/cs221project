@@ -1,6 +1,8 @@
 import random
 import gamestate as gameState
 import numpy as np
+import util
+from evalFunctions import *
 
 class Agent:
 	def getAction(self, actions, gameState=None):
@@ -21,9 +23,9 @@ class RandomAgent(Agent):
 class SearchAgent(Agent):
 
 	def __init__(self, evalFn = 'scoreEvaluationFunction', depth = '1'):
-	self.index = 0 #the agent is player 0
-	self.evaluationFunction = util.lookup(evalFn, globals())
-	self.depth = int(depth)
+		self.index = 0 #the agent is player 0
+		self.evaluationFunction = util.lookup(evalFn, globals())
+		self.depth = int(depth)
 
 
 class ABMinimaxAgent(SearchAgent):
@@ -31,10 +33,10 @@ class ABMinimaxAgent(SearchAgent):
 	Your minimax agent with alpha-beta pruning
 	"""
 
-	def getAction(self, gameState):
-	"""
+	def getAction(self, actions, gameState):
+		"""
 		Returns the minimax action using self.depth and self.evaluationFunction
-	"""
+		"""
 		def Vopt(newGameState, depth, alpha, beta) :	 
 
 			
