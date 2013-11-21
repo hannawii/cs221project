@@ -44,6 +44,12 @@ class GameState:
 		else : state.data._lose = True
 
 
+	def getNumAgents(self) :
+		return self.data.numPlayers
+
+	def getCurrPlayer(self) :
+		return self.data.currPlayer
+
 	def isLose( self ):
 		return self.data._lose
 

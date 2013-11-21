@@ -18,6 +18,147 @@ class RandomAgent(Agent):
 
 #		 return None
 
+class SearchAgent(Agent):
+
+	def __init__(self, evalFn = 'scoreEvaluationFunction', depth = '1'):
+	self.index = 0 #the agent is player 0
+	self.evaluationFunction = util.lookup(evalFn, globals())
+	self.depth = int(depth)
+
+
+class ABMinimaxAgent(SearchAgent):
+	"""
+	Your minimax agent with alpha-beta pruning
+	"""
+
+	def getAction(self, gameState):
+	"""
+		Returns the minimax action using self.depth and self.evaluationFunction
+	"""
+		def Vopt(newGameState, depth, alpha, beta) :	 
+
+			
+			def getVopt(action) :	
+				return Vopt(newGameState.generateSuccessor(action), depth, alpha, beta)
+
+			
+			actions = newGameState.getLegalActions()	
+			# if Directions.STOP in actions : actions.remove(Directions.STOP)		 
+
+
+			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
+				# if numAgent == self.index : return Directions.STOP
+				# else : return self.evaluationFunction(newGameState)
+				return self.evaluationFunction(newGameState)
+			
+
+			if newGameState.getCurrPlayer() == self.index :
+				bestAction = None
+				v = float('-inf')
+				for action in actions :
+					newV = getVopt(action)
+					v = max(v, newV)
+					if v == newV : bestAction = action
+					if v >= beta : return action
+					alpha = max(v, alpha)
+
+				return bestAction
+
+
+			elif newGameState.getCurrPlayer() % newGameState.getNumAgents() == 0 : 
+				v = float('-inf')
+				for action in actions :
+					v = max(v, getVopt(action))
+					if v >= beta : return v
+					alpha = max(v, alpha)
+				return v
+
+			elif ((newGameState.getCurrPlayer() + 1) % newGameState.getNumAgents()) == 0 :
+				depth -= 1
+				v = float('+inf')
+				for action in actions :
+					v = min(v, getVopt(action))
+					if v <= alpha : return v
+					beta = min(beta, v)
+				return v
+
+			else :
+				v = float('+inf')
+				for action in actions :
+					v = min(v, getVopt(action))
+					if v <= alpha : return v
+					beta = min(beta, v)
+				return v
+
+		return Vopt(gameState, self.depth, float('-inf'), float('+inf'))
+		
+
+
+# class ABExpectimaxAgent(SearchAgent):
+# 	"""
+# 	Your minimax agent with alpha-beta pruning
+# 	"""
+
+# 	def getAction(self, gameState):
+
+# 		def Vopt(newGameState, depth, alpha, beta) :	 
+
+			
+# 			def getVopt(action) :	
+# 				return Vopt(newGameState.generateSuccessor(action), depth, alpha, beta)
+
+			
+# 			actions = newGameState.getLegalActions()	
+# 			# if Directions.STOP in actions : actions.remove(Directions.STOP)		 
+
+
+# 			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
+# 				# if numAgent == self.index : return Directions.STOP
+# 				# else : return self.evaluationFunction(newGameState)
+# 				return self.evaluationFunction(newGameState)
+			
+
+# 			if newGameState.getCurrPlayer() == self.index :
+# 				bestAction = None
+# 				v = float('-inf')
+# 				for action in actions :
+# 					newV = getVopt(action)
+# 					v = max(v, newV)
+# 					if v == newV : bestAction = action
+# 					if v >= beta : return action
+# 					alpha = max(v, alpha)
+
+# 				return bestAction
+
+
+# 			elif newGameState.getCurrPlayer() % newGameState.getNumAgents() == 0 : 
+# 				v = float('-inf')
+# 				for action in actions :
+# 					v = max(v, getVopt(action))
+# 					if v >= beta : return v
+# 					alpha = max(v, alpha)
+# 				return v
+
+# 			elif ((newGameState.getCurrPlayer() + 1) % newGameState.getNumAgents()) == 0 :
+# 				depth -= 1
+# 				v = float('+inf')
+# 				for action in actions :
+# 					v = min(v, getVopt(action))
+# 					if v <= alpha : return v
+# 					beta = min(beta, v)
+# 				return v
+
+# 			else :
+# 				v = float('+inf')
+# 				for action in actions :
+# 					v = min(v, getVopt(action))
+# 					if v <= alpha : return v
+# 					beta = min(beta, v)
+# 				return v
+
+# 		return Vopt(gameState, self.depth, float('-inf'), float('+inf'))
+
+
 class HumanAgent(Agent):
 
 	def getAction(self, actions, gameState=None):
