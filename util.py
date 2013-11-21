@@ -1,6 +1,9 @@
 import csv
 
 class Player:
+	def __str__(self):
+		return player.name
+		
 	def __init__(self, row):
 		self.name = row[0]
 		self.fg = int(row[1])
@@ -29,6 +32,9 @@ class PlayerMap:
 			rownum+=1
 
 class Team:
+	def __str__(self):
+		return str(self.team)
+
 	def __init__(self, playerMap):
 		self.MAX_TEAM_SIZE = 5
 		self.team = list()

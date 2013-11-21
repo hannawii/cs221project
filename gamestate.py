@@ -22,13 +22,11 @@ class GameState:
 		# Copy current state
 		state = GameState(prevState=self)
 
-		# action = state.data.playerPool[stringAction]
-
 		FantasyBBRules.applyAction(state, action)
 
 		if state.data.currPlayer + 1 == state.data.numPlayers and state.data.teams[state.data.currPlayer].isFull() : self.calculateWinner(state)
 
-		state.datas.currPlayer += 1
+		state.data.currPlayer += 1
 
 		if (state.data.currPlayer >= state.data.numPlayers): state.data.currPlayer = 0
 	
@@ -110,7 +108,7 @@ class FantasyBBRules :
 			raise Exception("Illegal action " + str(action))
 
 		#Update teams
-		state.data.teams[state.data.currPlayer].add(action.name)
+		state.data.teams[state.data.currPlayer].add(action)
 
 		#Update money
 		#state.money -= action.player.price
@@ -122,7 +120,7 @@ class Actions :
 		actions=list()
 		for player in state.data.playerPool.values() :
 			if state.data.teams[state.data.currPlayer].canAdd(player.pos): 
-				actions.append(player)
+				actions.append(player.name)
 
 		return actions
 
@@ -131,6 +129,7 @@ class Actions :
 	# 	self.action = action
 	# 	self.player = player
 
+"""
 #Test
 start = GameState(numPlayers=2)
 next = start.generateSuccessor('LeBron James')
@@ -148,3 +147,4 @@ print next.data.teams[1].team
 print Team.play(next.data.teams[0],next.data.teams[1])
 print next.data._win
 print next.data._lose
+"""
