@@ -11,7 +11,7 @@ class GameState:
 
 		return FantasyBBRules.getLegalActions(self)
 
-	def generateSuccessor(self, stringAction):
+	def generateSuccessor(self, action):
 		"""
 		Returns the successor state after the specified agent takes the action.
 		"""
@@ -22,13 +22,13 @@ class GameState:
 		# Copy current state
 		state = GameState(prevState=self)
 
-		action = state.data.playerPool[stringAction]
+		# action = state.data.playerPool[stringAction]
 
 		FantasyBBRules.applyAction(state, action)
 
 		if state.data.currPlayer + 1 == state.data.numPlayers and state.data.teams[state.data.currPlayer].isFull() : self.calculateWinner(state)
 
-		state.data.currPlayer += 1
+		state.datas.currPlayer += 1
 
 		if (state.data.currPlayer >= state.data.numPlayers): state.data.currPlayer = 0
 	
@@ -52,6 +52,9 @@ class GameState:
 
 	def isWin( self ):
 		return self.data._win
+
+	def isOver(self) :
+		return self.data._win or self.data._lose
 
 
 	def __init__( self, prevState = None, numPlayers=5):
