@@ -9,3 +9,6 @@ def simpleEvaluation(state, evalArgs=None):
 		record[1]+=results[1]
 		record[2]+=results[2]
 	return float(record[0])-record[1]+record[2]*.5
+
+def extractFeatures(state):
+	features=[]

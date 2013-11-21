@@ -27,7 +27,7 @@ def main(args=None):
 	(opts,args) = parser.parse_args(args)	
 
 	numPlayers = int(opts.numPlayers)
-	players=[RandomAgent() for i in xrange(numPlayers-1)]
+	players=[MinimaxAgent('simpleEvaluation',depth=2) for i in xrange(numPlayers-1)]
 	players.insert(0,HumanAgent())
 	print run_game(players,GameState(numPlayers=numPlayers))
 
