@@ -66,11 +66,11 @@ class Team:
 		self.tov += cur.tov
 		self.pts += cur.pts
 
-	def full(self):
-		return len(self.team) < self.MAX_TEAM_SIZE
+	def isFull(self):
+		return len(self.team) >= self.MAX_TEAM_SIZE
 
 	def canAdd(self, position):
-		return not self.full() and not self.positions[position]
+		return not self.positions[position]
 
 	def fgp(self):
 		return float(self.fg)/self.fga
@@ -111,18 +111,3 @@ class Team:
 		elif team.pts < otherTeam.pts: losses+=1
 
 		return (wins,losses,9-wins-losses)
-
-playerMap = PlayerMap('playerData.csv')
-team1 = Team(playerMap)
-team1.add('Ricky Rubio')
-team1.add('Tyreke Evans')
-team1.add('Shawn Marion')
-team1.add('Blake Griffin')
-team1.add('Dwight Howard')
-team2 = Team(playerMap)
-team2.add('Stephen Curry')
-team2.add('Kevin Martin')
-team2.add('Danilo Gallinari')
-team2.add('Dirk Nowitzki')
-team2.add('Marc Gasol')
-print Team.play(team1,team2)
