@@ -4,19 +4,19 @@ from agent import *
 def run_game(players,g):
 	over = False
 	while not over:
-		for player in players:
-			g=turn(player,g)
+		for playerNum, player in enumerate(players):
+			g=turn(player,playerNum,g)
 			over = g.isOver()
 	return g.isWin()
 
-def turn(player,g):
-	actions = g.getLegalActions()
+def turn(player,playerNum,g):
+	actions = g.getLegalActions(playerNum)
 	print actions
 	if actions: 
 		action = player.getAction(actions,g)
 		print action
 	else: action = None
-	if action: g=g.generateSuccessor(action)
+	if action: g=g.generateSuccessor(action, playerNum)
 	for team in g.data.teams: print team
 	return g
 
@@ -32,8 +32,8 @@ def main(args=None):
 	numPlayers = int(opts.numPlayers)
 	depth = int(opts.depth)
 
-	players=[ABMinimaxAgent('simpleEvaluation',depth=depth) for i in xrange(numPlayers-1)]
-	players.insert(0,HumanAgent())
+	players=[HumanAgent() for i in xrange(numPlayers-1)]
+	players.insert(0,ABMinimaxAgent('simpleEvaluation',depth=depth))
 	print run_game(players,GameState(numPlayers=numPlayers))
 
 if __name__=="__main__":
