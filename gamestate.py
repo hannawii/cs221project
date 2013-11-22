@@ -116,6 +116,7 @@ class FantasyBBRules :
 
 		#Update teams
 		state.data.teams[playerNum].add(action)
+		state.data.playerPool.pop(action, None)
 
 		#Update money
 		#state.money -= action.player.price
