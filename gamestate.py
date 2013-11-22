@@ -1,17 +1,18 @@
 import collections
 from util import *
+import copy
 
 
 class GameState:
 	####################################################
 	# Accessor methods: use these to access state data #
 	####################################################
-	def getLegalActions(self):
+	def getLegalActions(self, playerNum):
 		if self.isWin() or self.isLose(): return []
 
-		return FantasyBBRules.getLegalActions(self)
+		return FantasyBBRules.getLegalActions(self, playerNum)
 
-	def generateSuccessor(self, action):
+	def generateSuccessor(self, action, playerNum):
 		"""
 		Returns the successor state after the specified agent takes the action.
 		"""
@@ -22,7 +23,7 @@ class GameState:
 		# Copy current state
 		state = GameState(prevState=self)
 
-		FantasyBBRules.applyAction(state, action)
+		FantasyBBRules.applyAction(state, action, playerNum)
 
 		if state.data.currPlayer + 1 == state.data.numPlayers and state.data.teams[state.data.currPlayer].isFull() : self.calculateWinner(state)
 
@@ -86,9 +87,9 @@ class GameStateData:
 
 	def __init__( self, numPlayers = 5, prevState = None ):
 		if prevState != None:
-			self.playerPool = dict(prevState.playerPool)
-			self.teams = list(prevState.teams)
-			self.currPlayer = prevState.currPlayer
+			self.playerPool = copy.deepcopy(prevState.playerPool)
+			self.teams = copy.deepcopy(prevState.teams)
+			self.currPlayer = copy.deepcopy(prevState.currPlayer)
 			self.numPlayers = prevState.numPlayers
 			# self.money = prevState.money
 		else :
@@ -104,28 +105,29 @@ class GameStateData:
 
 class FantasyBBRules :
 
-	def getLegalActions(state) :
-		return Actions.getPossibleActions(state)
+	def getLegalActions(state, playerNum) :
+		return Actions.getPossibleActions(state, playerNum)
 	getLegalActions = staticmethod(getLegalActions)
 
-	def applyAction(state, action) :
-		legal = FantasyBBRules.getLegalActions(state)
+	def applyAction(state, action, playerNum) :
+		legal = FantasyBBRules.getLegalActions(state, playerNum)
 		if action not in legal:
 			raise Exception("Illegal action " + str(action))
 
 		#Update teams
-		state.data.teams[state.data.currPlayer].add(action)
+		state.data.teams[playerNum].add(action)
 
 		#Update money
 		#state.money -= action.player.price
+		# for team in state.data.teams: print team
 	applyAction = staticmethod(applyAction)
 
 class Actions :
 
-	def getPossibleActions(state) :
+	def getPossibleActions(state, playerNum) :
 		actions=list()
 		for player in state.data.playerPool.values() :
-			if state.data.teams[state.data.currPlayer].canAdd(player.pos): 
+			if state.data.teams[playerNum].canAdd(player.pos): 
 				actions.append(player.name)
 
 		return actions

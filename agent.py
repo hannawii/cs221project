@@ -37,24 +37,23 @@ class ABMinimaxAgent(SearchAgent):
 		"""
 		Returns the minimax action using self.depth and self.evaluationFunction
 		"""
-		def Vopt(newGameState, depth, alpha, beta) :	 
+		def Vopt(newGameState, numAgent, depth, alpha, beta) :	 
 
 			
-			def getVopt(action) :	
-				return Vopt(newGameState.generateSuccessor(action), depth, alpha, beta)
+			def getVopt(action) :
+				return Vopt(newGameState.generateSuccessor(action, numAgent % newGameState.getNumAgents()), numAgent + 1, depth, alpha, beta)
 
 			
-			actions = newGameState.getLegalActions()	
+			actions = newGameState.getLegalActions(numAgent % newGameState.getNumAgents())	
 			# if Directions.STOP in actions : actions.remove(Directions.STOP)		 
 
-
 			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
-				# if numAgent == self.index : return Directions.STOP
-				# else : return self.evaluationFunction(newGameState)
-				return self.evaluationFunction(newGameState)
+				if numAgent == self.index : return None
+				else : return self.evaluationFunction(newGameState)
+				# return self.evaluationFunction(newGameState)
 			
 
-			if newGameState.getCurrPlayer() == self.index :
+			if numAgent == self.index :
 				bestAction = None
 				v = float('-inf')
 				for action in actions :
@@ -67,7 +66,7 @@ class ABMinimaxAgent(SearchAgent):
 				return bestAction
 
 
-			elif newGameState.getCurrPlayer() % newGameState.getNumAgents() == 0 : 
+			elif numAgent % newGameState.getNumAgents() == 0 : 
 				v = float('-inf')
 				for action in actions :
 					v = max(v, getVopt(action))
@@ -75,7 +74,7 @@ class ABMinimaxAgent(SearchAgent):
 					alpha = max(v, alpha)
 				return v
 
-			elif ((newGameState.getCurrPlayer() + 1) % newGameState.getNumAgents()) == 0 :
+			elif ((numAgent + 1) % newGameState.getNumAgents()) == 0 :
 				depth -= 1
 				v = float('+inf')
 				for action in actions :
@@ -92,7 +91,7 @@ class ABMinimaxAgent(SearchAgent):
 					beta = min(beta, v)
 				return v
 
-		return Vopt(gameState, self.depth, float('-inf'), float('+inf'))
+		return Vopt(gameState, gameState.getCurrPlayer(), self.depth, float('-inf'), float('+inf'))
 		
 
 
