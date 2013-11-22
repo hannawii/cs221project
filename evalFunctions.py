@@ -12,3 +12,13 @@ def simpleEvaluation(state, evalArgs=None):
 
 def extractFeatures(state):
 	features=[]
+	#Indicator on what positions each team has
+	for team in state.data.teams:
+		features += team.positions.values()
+
+	#Indicator on whether we beat each other team
+	for opponent in xrange(1, state.data.numPlayers):
+		results = Team.play(state.data.teams[0], state.data.teams[opponent])
+		if results[0] > results[1]: features += [1]
+		else: features += [0]
+	

@@ -79,9 +79,11 @@ class Team:
 		return not self.positions[position]
 
 	def fgp(self):
+		if self.fga==0: return 0
 		return float(self.fg)/self.fga
 
 	def ftp(self):
+		if self.fta==0: return 0
 		return float(self.ft)/self.fta
 
 	@staticmethod
