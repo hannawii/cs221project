@@ -22,8 +22,8 @@ class RandomAgent(Agent):
 
 class SearchAgent(Agent):
 
-	def __init__(self, evalFn = 'scoreEvaluationFunction', depth = '1'):
-		self.index = 0 #the agent is player 0
+	def __init__(self, evalFn = 'scoreEvaluationFunction', depth = '1', agent = 0):
+		self.index = agent #any agent can be who we are maximizing
 		self.evaluationFunction = util.lookup(evalFn, globals())
 		self.depth = int(depth)
 
@@ -66,7 +66,7 @@ class ABMinimaxAgent(SearchAgent):
 				return bestAction
 
 
-			elif numAgent % newGameState.getNumAgents() == 0 : 
+			elif numAgent % newGameState.getNumAgents() == self.index : 
 				v = float('-inf')
 				for action in actions :
 					v = max(v, getVopt(action))
@@ -74,7 +74,7 @@ class ABMinimaxAgent(SearchAgent):
 					alpha = max(v, alpha)
 				return v
 
-			elif ((numAgent + 1) % newGameState.getNumAgents()) == 0 :
+			elif ((numAgent + 1) % newGameState.getNumAgents()) == self.index :
 				depth -= 1
 				v = float('+inf')
 				for action in actions :
