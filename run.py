@@ -32,8 +32,8 @@ def main(args=None):
 	numPlayers = int(opts.numPlayers)
 	depth = int(opts.depth)
 
-	players=[HumanAgent() for i in xrange(numPlayers-1)]
-	players.insert(0,ABMinimaxAgent('simpleEvaluation',depth=depth))
+	players=[ABMinimaxAgent('simpleEvaluation',depth=depth, agent=i+1) for i in xrange(numPlayers-1)]
+	players.insert(0,HumanAgent())
 	print run_game(players,GameState(numPlayers=numPlayers))
 
 if __name__=="__main__":
