@@ -7,8 +7,9 @@ def simpleEvaluation(state, evalArgs=None):
 		results = Team.play(state.data.teams[0], state.data.teams[opponent])
 		record[0]+=results[0]
 		record[1]+=results[1]
-		record[2]+=results[2]
-	return float(record[0])-record[1]+record[2]*.5
+		# record[2]+=results[2]
+	# return float(record[0])-record[1]+record[2]*.5
+	return float(record[0] - record[1])
 
 def simpleEvaluation2(state, evalArgs=None):
 	totalStats = 0
@@ -28,6 +29,10 @@ def extractFeatures(state):
 		results = Team.play(state.data.teams[0], state.data.teams[opponent])
 		if results[0] > results[1]: features += [1]
 		else: features += [0]
+
+    #Add number of remaining people in each position in the pool?
+
+
 
 	return features
 

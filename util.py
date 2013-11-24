@@ -95,34 +95,62 @@ class Team:
 		wins = 0
 		losses = 0
 
-		if team.fgp() > otherTeam.fgp(): wins+=1
-		elif team.fgp() < otherTeam.fgp(): losses+=1
+		if team.fgp() > otherTeam.fgp(): wins+=team.fgp() - otherTeam.fgp()
+		elif team.fgp() < otherTeam.fgp(): losses+=otherTeam.fgp() - team.fgp()
 
-		if team.threes > otherTeam.threes: wins+=1
-		elif team.threes < otherTeam.threes: losses+=1
+		if team.threes > otherTeam.threes: wins+=team.threes - otherTeam.threes
+		elif team.threes < otherTeam.threes: losses+=otherTeam.threes - team.threes
 
-		if team.ftp > otherTeam.ftp: wins+=1
-		elif team.ftp < otherTeam.ftp: losses+=1
+		if team.ftp > otherTeam.ftp: wins+=team.ftp() - otherTeam.ftp()
+		elif team.ftp < otherTeam.ftp: losses+=otherTeam.ftp() - team.ftp()
 
-		if team.reb > otherTeam.reb: wins+=1
-		elif team.reb < otherTeam.reb: losses+=1
+		if team.reb > otherTeam.reb: wins+=team.reb - otherTeam.reb
+		elif team.reb < otherTeam.reb: losses+=otherTeam.reb - team.reb
 
-		if team.ast > otherTeam.ast: wins+=1
-		elif team.ast < otherTeam.ast: losses+=1
+		if team.ast > otherTeam.ast: wins+=team.ast - otherTeam.ast
+		elif team.ast < otherTeam.ast: losses+=otherTeam.ast - team.ast
 
-		if team.stl > otherTeam.stl: wins+=1
-		elif team.stl < otherTeam.stl: losses+=1
+		if team.stl > otherTeam.stl: wins+=team.stl - otherTeam.stl
+		elif team.stl < otherTeam.stl: losses+=otherTeam.stl - team.stl
 
-		if team.blk > otherTeam.blk: wins+=1
-		elif team.blk < otherTeam.blk: losses+=1
+		if team.blk > otherTeam.blk: wins+=team.blk - otherTeam.blk
+		elif team.blk < otherTeam.blk: losses+=otherTeam.blk - team.blk
 
-		if team.tov < otherTeam.tov: wins+=1
-		elif team.tov > otherTeam.tov: losses+=1
+		if team.tov < otherTeam.tov: wins+=team.tov - otherTeam.tov
+		elif team.tov > otherTeam.tov: losses+=otherTeam.tov - team.tov
 
-		if team.pts > otherTeam.pts: wins+=1
-		elif team.pts < otherTeam.pts: losses+=1
+		if team.pts > otherTeam.pts: wins+=team.pts - otherTeam.pts
+		elif team.pts < otherTeam.pts: losses+=otherTeam.pts - team.pts
 
-		return (wins,losses,9-wins-losses)
+		# if team.fgp() > otherTeam.fgp(): wins+=1
+		# elif team.fgp() < otherTeam.fgp(): losses+=1
+
+		# if team.threes > otherTeam.threes: wins+=1
+		# elif team.threes < otherTeam.threes: losses+=1
+
+		# if team.ftp > otherTeam.ftp: wins+=1
+		# elif team.ftp < otherTeam.ftp: losses+=1
+
+		# if team.reb > otherTeam.reb: wins+=1
+		# elif team.reb < otherTeam.reb: losses+=1
+
+		# if team.ast > otherTeam.ast: wins+=1
+		# elif team.ast < otherTeam.ast: losses+=1
+
+		# if team.stl > otherTeam.stl: wins+=1
+		# elif team.stl < otherTeam.stl: losses+=1
+
+		# if team.blk > otherTeam.blk: wins+=1
+		# elif team.blk < otherTeam.blk: losses+=1
+
+		# if team.tov < otherTeam.tov: wins+=1
+		# elif team.tov > otherTeam.tov: losses+=1
+
+		# if team.pts > otherTeam.pts: wins+=1
+		# elif team.pts < otherTeam.pts: losses+=1
+
+		# return (wins,losses,9-wins-losses)
+		return (wins, losses)
 
 
 def lookup(name, namespace):

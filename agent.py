@@ -22,7 +22,7 @@ class IntelligentAgent(Agent) :
 	 		return action.playerRank
 
 		if actions :
-			return random.choice(list(nsmallest(5, actions, key=getRank)))
+			return random.choice(list(nsmallest(6, actions, key=getRank)))
 		return None
 
 class SearchAgent(Agent):

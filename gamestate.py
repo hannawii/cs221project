@@ -40,10 +40,10 @@ class GameState:
 			for opponent in xrange(gamePlayer + 1, state.data.numPlayers) :
 				results = team.play(team, state.data.teams[opponent])
 				if results[0] > results[1] : winRecord[gamePlayer] += 1
-				elif results[1] > results[0] : winRecord[opponent] += 1 #currently a tie goes to the opponent
-				else :
-					winRecord[gamePlayer] += 1
-					winRecord[opponent] += 1
+				elif results[1] >= results[0] : winRecord[opponent] += 1 #currently a tie goes to the opponent
+				# else :
+				# 	winRecord[gamePlayer] += 1
+				# 	winRecord[opponent] += 1
 		if max(winRecord, key=winRecord.get) == 0 : state.data._win = True 
 		else : state.data._lose = True
 
@@ -104,6 +104,9 @@ class GameStateData:
 			# self.money = 100
 		self._win = False
 		self._lose = False
+
+	# def deepCopy(self) :
+
 
 
 class FantasyBBRules :
