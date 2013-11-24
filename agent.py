@@ -2,6 +2,8 @@ import random
 import gamestate as gameState
 import numpy as np
 import util
+from gamestate import Actions
+from heapq import nsmallest
 from evalFunctions import *
 
 class Agent:
@@ -14,15 +16,18 @@ class RandomAgent(Agent):
 			return random.choice(list(actions))
 		return None
 
-# class IntelligentAgent(Agent) :
-#	 def getAction(self, actions, gameState=None) :
-#		 if actions :
+class IntelligentAgent(Agent) :
+	 def getAction(self, actions, gameState=None) :
+	 	def	getRank(action) :
+	 		return action.playerRank
 
-#		 return None
+		if actions :
+			return random.choice(list(nsmallest(5, actions, key=getRank)))
+		return None
 
 class SearchAgent(Agent):
 
-	def __init__(self, evalFn = 'scoreEvaluationFunction', depth = '1', agent = 0):
+	def __init__(self, evalFn = 'simpleEvaluationFunction', depth = '1', agent = 0):
 		self.index = agent #any agent can be who we are maximizing
 		self.evaluationFunction = util.lookup(evalFn, globals())
 		self.depth = int(depth)
@@ -148,7 +153,7 @@ class HumanAgent(Agent):
 				return None
 			while True:
 				action = raw_input("Please enter a basketball player to draft: ")
-				#action = self.get_formatted_move(mv1, game)
+				action = self.get_formatted_move(action, gameState)
 				if not action:
 					print 'The player you chose is not very good, you should reconsider'
 				else:
@@ -170,7 +175,9 @@ class HumanAgent(Agent):
 			# else:
 			#	 move = (mv1,)
 
-			if action in actions:
+			# if action in actions:
+			# 	legal = FantasyBBRules.getLegalActions(state, playerNum)
+			if any(a.playerName == action.playerName for a in actions) :
 				break
 			# elif move[::-1] in moves:
 			#	 move = move[::-1]
@@ -179,9 +186,9 @@ class HumanAgent(Agent):
 				print "You can't play that move"
 		return action
 
-	def get_formatted_move(self, action, gameState):
+	def get_formatted_move(self, playerName, gameState):
 
-		if stringAction in gameState.data.playerPool:
-			return gameState.data.playerPool[stringAction]
+		if playerName in gameState.data.playerPool.keys() :
+			return Actions(playerName, gameState.data.playerPool[playerName].rank) 
 		else :
-			return False
+			return None

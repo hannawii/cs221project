@@ -111,12 +111,13 @@ class FantasyBBRules :
 
 	def applyAction(state, action, playerNum) :
 		legal = FantasyBBRules.getLegalActions(state, playerNum)
-		if action not in legal:
+		if not any(a.playerName == action.playerName for a in legal) :
+		# if action.playerName not in legal:
 			raise Exception("Illegal action " + str(action))
 
 		#Update teams
-		state.data.teams[playerNum].add(action)
-		state.data.playerPool.pop(action, None)
+		state.data.teams[playerNum].add(action.playerName)
+		state.data.playerPool.pop(action.playerName, None)
 
 		#Update money
 		#state.money -= action.player.price
@@ -127,16 +128,22 @@ class Actions :
 
 	def getPossibleActions(state, playerNum) :
 		actions=list()
-		for player in state.data.playerPool.values() :
+		# positions = [key for key, value in state.data.teams[playerNum].positions.iteritems() if not value]
+		# return [player.name for player in state.data.playerPool.values() if player.pos in positions]
+		playerPool = state.data.playerPool.values()
+		
+		for player in playerPool :
 			if state.data.teams[playerNum].canAdd(player.pos): 
-				actions.append(player.name)
+				actions.append(Actions(player.name, player.rank))
+			# else : state.data.playerPool.pop(player.name, None)
 
 		return actions
 
 	getPossibleActions = staticmethod(getPossibleActions)
-	# def __init__(self, action, player = None):
-	# 	self.action = action
-	# 	self.player = player
+	
+	def __init__(self, name, rank):
+		self.playerName = name
+		self.playerRank = rank
 
 """
 #Test
