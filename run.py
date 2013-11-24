@@ -14,8 +14,8 @@ def train(numPlayers,depth,numGames=500):
 
 		g = GameState(numPlayers=numPlayers)
 		players=[IntelligentAgent() for i in xrange(numPlayers-1)]
-		players.insert(0,ABMinimaxAgent(evalFn,depth=depth,agent=0,evalArgs=w))
-
+		# players.insert(0,ABMinimaxAgent(evalFn,depth=depth,agent=0,evalArgs=w))
+		players.insert(0,FeatAgent(evalFn,depth=depth,agent=0,evalArgs=w))
 		over = False
 		playernum=0
 		while not over:
@@ -47,7 +47,8 @@ def train(numPlayers,depth,numGames=500):
 def test(numPlayers,depth,w,numGames=50,draw=False):
 	players=[IntelligentAgent() for i in xrange(numPlayers-1)]
 	evalFn = evalFunctions.logLinearEvaluation
-	players.insert(0,ABMinimaxAgent(evalFn,depth=depth,agent=0,evalArgs=w))
+	# players.insert(0,ABMinimaxAgent(evalFn,depth=depth,agent=0,evalArgs=w))
+	players.insert(0,FeatAgent(evalFn,depth=depth,agent=0,evalArgs=w))
 	winners = [0,0]
 	for _ in xrange(numGames):
 		g = GameState(numPlayers=numPlayers)

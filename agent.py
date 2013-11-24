@@ -27,6 +27,30 @@ class IntelligentAgent(Agent) :
 			return random.choice(list(nsmallest(6, actions, key=getRank)))
 		return None
 
+class FeaturesAgent(Agent) :
+	def __init__(self, evalFn, depth = '1', agent = 0, evalArgs = None):
+		self.index = agent #any agent can be who we are maximizing
+		self.evaluationFunction = evalFn
+		self.depth = int(depth)
+		self.evaluationArgs = evalArgs
+	def setWeights(self, w):
+		"""
+		Updates weights of reflex agent.  Used for training.
+		"""
+		self.evaluationArgs = w
+
+
+class FeatAgent(FeaturesAgent) :
+	def getAction(self, actions, gameState=None) :
+		def getWeight(action) :
+			newGameState = gameState.generateSuccessor(action, self.index)
+			return self.evaluationFunction(newGameState, self.evaluationArgs)
+		
+		return max(actions, key=getWeight)
+
+
+
+
 class SearchAgent(Agent):
 
 	def __init__(self, evalFn, depth = '1', agent = 0, evalArgs = None):
