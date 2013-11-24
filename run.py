@@ -61,7 +61,8 @@ def run_game(players,g):
 
 def turn(player,playerNum,g):
 	actions = g.getLegalActions(playerNum)
-	print actions
+	print [action.playerName for action in actions]
+	# print actions
 	if actions: 
 		action = player.getAction(actions,g)
 		print action
@@ -82,8 +83,9 @@ def main(args=None):
 	numPlayers = int(opts.numPlayers)
 	depth = int(opts.depth)
 
-	players=[RandomAgent() for i in xrange(numPlayers-1)]
-	players.insert(0,ABMinimaxAgent('simpleEvaluation2',depth=depth, agent=0))
+	# players=[HumanAgent() for i in xrange(numPlayers-1)]
+	players=[IntelligentAgent() for i in xrange(numPlayers-1)]
+	players.insert(0,ABMinimaxAgent('simpleEvaluation',depth=depth, agent=0))
 	print run_game(players,GameState(numPlayers=numPlayers))
 
 if __name__=="__main__":

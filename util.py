@@ -6,6 +6,7 @@ class Player:
 		
 	def __init__(self, row):
 		self.name = row[0]
+		# self.rank = row[1]
 		self.fg = int(row[1])
 		self.fga = int(row[2])
 		self.threes = int(row[3])
@@ -18,6 +19,8 @@ class Player:
 		self.tov = int(row[10])
 		self.pts = int(row[11])
 		self.pos = row[12]
+		# self.rank = row[13]
+		self.rank = 0
 
 class PlayerMap:
 	def __init__(self, playerData):
@@ -29,6 +32,7 @@ class PlayerMap:
 			if rownum>0:
 				player = Player(row)
 				self.map[player.name] = player
+				player.rank = rownum
 			rownum+=1
 
 class Team:
