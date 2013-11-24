@@ -1,7 +1,9 @@
 from util import *
 from gamestate import *
+import math
 
 def simpleEvaluation(state, evalArgs=None):
+	print 'please dont happen'
 	record = [0]*3
 	for opponent in xrange(1, state.data.numPlayers):
 		results = Team.play(state.data.teams[0], state.data.teams[opponent])
@@ -12,6 +14,7 @@ def simpleEvaluation(state, evalArgs=None):
 	return float(record[0] - record[1])
 
 def simpleEvaluation2(state, evalArgs=None):
+	print 'please dont happen either'
 	totalStats = 0
 	for playerName in state.data.teams[0].team:
 		player = state.data.teams[0].playerMap.map[playerName]
@@ -23,6 +26,35 @@ def extractFeatures(state):
 	#Indicator on what positions each team has
 	for team in state.data.teams:
 		features += team.positions.values()
+
+	team = state.data.teams[0]
+	#Indicator on strength of each stat
+	if team.fgp() >= .45: features += [1]
+	else: features += [0]
+
+	if team.ftp() >= .80: features += [1]
+	else: features += [0]
+
+	if team.threes >= len(team.team)*100: features += [1]
+	else: features += [0]
+
+	if team.reb >= len(team.team)*600: features += [1]
+	else: features += [0]
+
+	if team.stl >= len(team.team)*60: features += [1]
+	else: features += [0]
+
+	if team.ast >= len(team.team)*400: features += [1]
+	else: features += [0]
+
+	if team.blk >= len(team.team)*30: features += [1]
+	else: features += [0]
+
+	if team.pts >= len(team.team)*1500: features += [1]
+	else: features += [0]
+
+	if team.tov <= len(team.team)*40: features += [1]
+	else: features += [0]
 
 	#Indicator on whether we beat each other team
 	for opponent in xrange(1, state.data.numPlayers):
@@ -76,6 +108,7 @@ def TDUpdate(state, nextState, reward, w, eta):
     @returns w : Updated weights.
     """
     # BEGIN_YOUR_CODE (around 13 lines of code expected)
+    print 'in td update, weights is now {}'.format(w)
     if nextState is None:
         r = reward-logLinearEvaluation(state,w)
     else: r = reward+logLinearEvaluation(nextState,w)-logLinearEvaluation(state,w)

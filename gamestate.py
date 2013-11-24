@@ -44,9 +44,12 @@ class GameState:
 				# else :
 				# 	winRecord[gamePlayer] += 1
 				# 	winRecord[opponent] += 1
-		if max(winRecord, key=winRecord.get) == 0 : state.data._win = True 
-		else : state.data._lose = True
-
+		if max(winRecord, key=winRecord.get) == 0 : 
+			state.data._win = True 
+			state.data._lose = False
+		else : 
+			state.data._lose = True
+			state.data._win = False
 
 	def getNumAgents(self) :
 		return self.data.numPlayers
@@ -150,23 +153,3 @@ class Actions :
 	def __init__(self, name, rank):
 		self.playerName = name
 		self.playerRank = rank
-
-"""
-#Test
-start = GameState(numPlayers=2)
-next = start.generateSuccessor('LeBron James')
-next = next.generateSuccessor('Kevin Durant')
-next = next.generateSuccessor('Chris Paul')
-next = next.generateSuccessor('Brandon Jennings')
-next = next.generateSuccessor('James Harden')
-next = next.generateSuccessor('Kobe Bryant')
-next = next.generateSuccessor('Josh Smith')
-next = next.generateSuccessor('Paul Millsap')
-next = next.generateSuccessor('Brook Lopez')
-next = next.generateSuccessor('Dwight Howard')
-print next.data.teams[0].team
-print next.data.teams[1].team
-print Team.play(next.data.teams[0],next.data.teams[1])
-print next.data._win
-print next.data._lose
-"""

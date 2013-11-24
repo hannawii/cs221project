@@ -3,12 +3,14 @@ import gamestate as gameState
 import numpy as np
 import util
 from gamestate import Actions
-from heapq import nsmallest
+from heapq import nsmallest, nlargest
 from evalFunctions import *
 
 class Agent:
 	def getAction(self, actions, gameState=None):
 		raise NotImplementedError("Override me")
+	def setWeights(self,w):
+		return None
 
 class RandomAgent(Agent):
 	def getAction(self, actions, gameState=None):
@@ -17,7 +19,7 @@ class RandomAgent(Agent):
 		return None
 
 class IntelligentAgent(Agent) :
-	 def getAction(self, actions, gameState=None) :
+	def getAction(self, actions, gameState=None) :
 	 	def	getRank(action) :
 	 		return action.playerRank
 
@@ -27,11 +29,16 @@ class IntelligentAgent(Agent) :
 
 class SearchAgent(Agent):
 
-	def __init__(self, evalFn = 'simpleEvaluationFunction', depth = '1', agent = 0):
+	def __init__(self, evalFn, depth = '1', agent = 0, evalArgs = None):
 		self.index = agent #any agent can be who we are maximizing
-		self.evaluationFunction = util.lookup(evalFn, globals())
+		self.evaluationFunction = evalFn
 		self.depth = int(depth)
-
+		self.evaluationArgs = evalArgs
+	def setWeights(self, w):
+		"""
+		Updates weights of reflex agent.  Used for training.
+		"""
+		self.evaluationArgs = w
 
 class ABMinimaxAgent(SearchAgent):
 	"""
@@ -54,7 +61,7 @@ class ABMinimaxAgent(SearchAgent):
 
 			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
 				if numAgent == self.index : return None
-				else : return self.evaluationFunction(newGameState)
+				else : return self.evaluationFunction(newGameState,self.evaluationArgs)
 				# return self.evaluationFunction(newGameState)
 			
 
@@ -96,7 +103,11 @@ class ABMinimaxAgent(SearchAgent):
 					beta = min(beta, v)
 				return v
 
-		return Vopt(gameState, gameState.getCurrPlayer(), self.depth, float('-inf'), float('+inf'))
+		if random.random() < .2:
+			if actions:
+				return random.choice(list(actions))
+			return None
+		else: return Vopt(gameState, gameState.getCurrPlayer(), self.depth, float('-inf'), float('+inf'))
 		
 
 
@@ -122,7 +133,7 @@ class ExpectimaxAgent(SearchAgent):
 
 			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
 				if numAgent == self.index : return None
-				else : return self.evaluationFunction(newGameState)
+				else : return self.evaluationFunction(newGameState,self.evaluationArgs)
 		
 
 			if numAgent == self.index : return max(actions, key=getVopt)
