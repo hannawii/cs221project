@@ -3,12 +3,14 @@ import gamestate as gameState
 import numpy as np
 import util
 from gamestate import Actions
-from heapq import nsmallest
+from heapq import nsmallest, nlargest
 from evalFunctions import *
 
 class Agent:
 	def getAction(self, actions, gameState=None):
 		raise NotImplementedError("Override me")
+	def setWeights(self,w):
+		return None
 
 class RandomAgent(Agent):
 	def getAction(self, actions, gameState=None):
@@ -23,8 +25,6 @@ class IntelligentAgent(Agent) :
 
 		if actions :
 			return random.choice(list(nsmallest(5, actions, key=getRank)))
-		return None
-	def setWeights(self,w):
 		return None
 
 class SearchAgent(Agent):
@@ -103,7 +103,11 @@ class ABMinimaxAgent(SearchAgent):
 					beta = min(beta, v)
 				return v
 
-		return Vopt(gameState, gameState.getCurrPlayer(), self.depth, float('-inf'), float('+inf'))
+		if random.random() < .2:
+			if actions:
+				return random.choice(list(actions))
+			return None
+		else: return Vopt(gameState, gameState.getCurrPlayer(), self.depth, float('-inf'), float('+inf'))
 		
 
 
