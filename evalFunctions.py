@@ -1,5 +1,6 @@
 from util import *
 from gamestate import *
+import math
 
 def simpleEvaluation(state, evalArgs=None):
 	record = [0]*3

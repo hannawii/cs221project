@@ -17,21 +17,28 @@ class RandomAgent(Agent):
 		return None
 
 class IntelligentAgent(Agent) :
-	 def getAction(self, actions, gameState=None) :
+	def getAction(self, actions, gameState=None) :
 	 	def	getRank(action) :
 	 		return action.playerRank
 
 		if actions :
 			return random.choice(list(nsmallest(5, actions, key=getRank)))
 		return None
+	def setWeights(self,w):
+		return None
 
 class SearchAgent(Agent):
 
-	def __init__(self, evalFn = 'simpleEvaluationFunction', depth = '1', agent = 0):
+	def __init__(self, evalFn, depth = '1', agent = 0, evalArgs = None):
 		self.index = agent #any agent can be who we are maximizing
-		self.evaluationFunction = util.lookup(evalFn, globals())
+		self.evaluationFunction = evalFn
 		self.depth = int(depth)
-
+		self.evaluationArgs = evalArgs
+	def setWeights(self, w):
+		"""
+		Updates weights of reflex agent.  Used for training.
+		"""
+		self.evaluationArgs = w
 
 class ABMinimaxAgent(SearchAgent):
 	"""
@@ -54,7 +61,7 @@ class ABMinimaxAgent(SearchAgent):
 
 			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
 				if numAgent == self.index : return None
-				else : return self.evaluationFunction(newGameState)
+				else : return self.evaluationFunction(newGameState,self.evaluationArgs)
 				# return self.evaluationFunction(newGameState)
 			
 
@@ -122,7 +129,7 @@ class ExpectimaxAgent(SearchAgent):
 
 			if newGameState.isWin() or newGameState.isLose() or len(actions) == 0 or depth == 0 :
 				if numAgent == self.index : return None
-				else : return self.evaluationFunction(newGameState)
+				else : return self.evaluationFunction(newGameState,self.evaluationArgs)
 		
 
 			if numAgent == self.index : return max(actions, key=getVopt)
