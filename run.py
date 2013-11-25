@@ -3,7 +3,7 @@ from util import *
 from agent import *
 import evalFunctions
 
-def train(numPlayers,depth,numGames=500):
+def train(numPlayers,depth,numGames=100):
 	alpha = 2e-1
 	numFeats = 20
 	evalFn = evalFunctions.logLinearEvaluation
