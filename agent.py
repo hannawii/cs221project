@@ -45,7 +45,7 @@ class FeatAgent(FeaturesAgent) :
 		def getWeight(action) :
 			newGameState = gameState.generateSuccessor(action, self.index)
 			return self.evaluationFunction(newGameState, self.evaluationArgs)
-		if random.random() < .2:
+		if random.random() < .4:
 			if actions:
 				return random.choice(list(actions))
 			return None
