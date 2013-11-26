@@ -16,7 +16,7 @@ class Agent:
 			if actions:
 	 			def	getRank(action) :
 	 				return action.playerRank
-				return random.choice(list(nsmallest(5, actions, key=getRank)))
+				return random.choice(list(nsmallest(10, actions, key=getRank)))
 			return None
 		else: 
 			return self.getAction(actions, gameState)
@@ -31,7 +31,6 @@ class IntelligentAgent(Agent) :
 	def getAction(self, actions, gameState=None) :
 	 	def	getRank(action) :
 	 		return action.playerRank
-
 		if actions :
 			return random.choice(list(nsmallest(3, actions, key=getRank)))
 		return None

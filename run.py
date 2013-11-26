@@ -3,15 +3,13 @@ from util import *
 from agent import *
 import evalFunctions
 
-def train(numPlayers,depth,numGames=100,prevWeights=None):
+def train(numPlayers,depth,numGames=100):
 	alpha = 2e-1
 	numFeats = len(evalFunctions.extractFeatures(GameState(numPlayers=numPlayers)))
 	print numFeats
 	evalFn = evalFunctions.logLinearEvaluation
-	if prevWeights: w = prevWeights
-	else: 
-		w = [random.gauss(0,1e-2) for _ in range(numFeats)]
-		w[-1] = 0
+	w = [random.gauss(0,1e-2) for _ in range(numFeats)]
+	w[-1] = 0
 
 	for it in xrange(numGames):
 
@@ -108,16 +106,16 @@ def main(args=None):
 	depth = int(opts.depth)
 
 	weights=None
-	weights=load_weights(weights)
+	#weights=load_weights(weights)
 	if opts.train:
-		weights=train(numPlayers,depth,prevWeights=weights)
+		weights=train(numPlayers,depth)
 
 	if opts.eval:
 		weights = load_weights(weights)
 		evalFn = evalFunctions.logLinearEvaluation
 		evalArgs = weights
 	else:
-		evalFn = evalFunctions.logLinearEvaluation
+		evalFn = evalFunctions.simpleEvaluation
 		evalArgs = weights
 
 	"""
