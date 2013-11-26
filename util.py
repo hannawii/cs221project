@@ -90,67 +90,93 @@ class Team:
 		if self.fta==0: return 0
 		return float(self.ft)/self.fta
 
+	def scaledPlay(team, otherTeam) :
+		wins = 0
+		losses = 0
+		if len(team.team) > 0 : sizeDiff = float(len(otherTeam.team)) / float(len(team.team))
+		else : sizeDiff = 0
+
+		def fgp(team) : return team.fgp()
+		def ftp(team) : return team.ftp()
+		def threes(team) : return team.threes
+		def reb(team) : return team.reb
+		def stl(team) : return team.stl
+		def ast(team) : return team.ast
+		def blk(team) : return team.blk
+		def pts(team) : return team.pts
+		def tov(team) : return team.tov
+
+		stats = {0 : fgp, 1 : ftp, 2 : threes, 3 : reb, 4 : stl, 5 : ast, 6 : blk, 7 : pts, 8 : tov}
+
+		for stat in xrange(9) :
+			if (stats[stat](team) * sizeDiff) > stats[stat](otherTeam) : wins+=1
+			elif (stats[stat](team) * sizeDiff) < stats[stat](otherTeam) : losses+=1
+
+		return (wins,losses,9-wins-losses)
+
 	@staticmethod
 	def play(team, otherTeam):
 		wins = 0
 		losses = 0
 
-		if team.fgp() > otherTeam.fgp(): wins+=team.fgp() - otherTeam.fgp()
-		elif team.fgp() < otherTeam.fgp(): losses+=otherTeam.fgp() - team.fgp()
+		# if team.fgp() > otherTeam.fgp(): wins+=team.fgp() - otherTeam.fgp()
+		# elif team.fgp() < otherTeam.fgp(): losses+=otherTeam.fgp() - team.fgp()
 
-		if team.threes > otherTeam.threes: wins+=team.threes - otherTeam.threes
-		elif team.threes < otherTeam.threes: losses+=otherTeam.threes - team.threes
+		# if team.threes > otherTeam.threes: wins+=team.threes - otherTeam.threes
+		# elif team.threes < otherTeam.threes: losses+=otherTeam.threes - team.threes
 
-		if team.ftp > otherTeam.ftp: wins+=team.ftp() - otherTeam.ftp()
-		elif team.ftp < otherTeam.ftp: losses+=otherTeam.ftp() - team.ftp()
+		# if team.ftp > otherTeam.ftp: wins+=team.ftp() - otherTeam.ftp()
+		# elif team.ftp < otherTeam.ftp: losses+=otherTeam.ftp() - team.ftp()
 
-		if team.reb > otherTeam.reb: wins+=team.reb - otherTeam.reb
-		elif team.reb < otherTeam.reb: losses+=otherTeam.reb - team.reb
+		# if team.reb > otherTeam.reb: wins+=team.reb - otherTeam.reb
+		# elif team.reb < otherTeam.reb: losses+=otherTeam.reb - team.reb
 
-		if team.ast > otherTeam.ast: wins+=team.ast - otherTeam.ast
-		elif team.ast < otherTeam.ast: losses+=otherTeam.ast - team.ast
+		# if team.ast > otherTeam.ast: wins+=team.ast - otherTeam.ast
+		# elif team.ast < otherTeam.ast: losses+=otherTeam.ast - team.ast
 
-		if team.stl > otherTeam.stl: wins+=team.stl - otherTeam.stl
-		elif team.stl < otherTeam.stl: losses+=otherTeam.stl - team.stl
+		# if team.stl > otherTeam.stl: wins+=team.stl - otherTeam.stl
+		# elif team.stl < otherTeam.stl: losses+=otherTeam.stl - team.stl
 
-		if team.blk > otherTeam.blk: wins+=team.blk - otherTeam.blk
-		elif team.blk < otherTeam.blk: losses+=otherTeam.blk - team.blk
+		# if team.blk > otherTeam.blk: wins+=team.blk - otherTeam.blk
+		# elif team.blk < otherTeam.blk: losses+=otherTeam.blk - team.blk
 
-		if team.tov < otherTeam.tov: wins+=team.tov - otherTeam.tov
-		elif team.tov > otherTeam.tov: losses+=otherTeam.tov - team.tov
+		# if team.tov < otherTeam.tov: wins+=team.tov - otherTeam.tov
+		# elif team.tov > otherTeam.tov: losses+=otherTeam.tov - team.tov
 
-		if team.pts > otherTeam.pts: wins+=team.pts - otherTeam.pts
-		elif team.pts < otherTeam.pts: losses+=otherTeam.pts - team.pts
+		# if team.pts > otherTeam.pts: wins+=team.pts - otherTeam.pts
+		# elif team.pts < otherTeam.pts: losses+=otherTeam.pts - team.pts		
 
-		# if team.fgp() > otherTeam.fgp(): wins+=1
-		# elif team.fgp() < otherTeam.fgp(): losses+=1
+		# return (wins, losses)
 
-		# if team.threes > otherTeam.threes: wins+=1
-		# elif team.threes < otherTeam.threes: losses+=1
+		if team.fgp() > otherTeam.fgp(): wins+=1
+		elif team.fgp() < otherTeam.fgp(): losses+=1
 
-		# if team.ftp > otherTeam.ftp: wins+=1
-		# elif team.ftp < otherTeam.ftp: losses+=1
+		if team.threes > otherTeam.threes: wins+=1
+		elif team.threes < otherTeam.threes: losses+=1
 
-		# if team.reb > otherTeam.reb: wins+=1
-		# elif team.reb < otherTeam.reb: losses+=1
+		if team.ftp > otherTeam.ftp: wins+=1
+		elif team.ftp < otherTeam.ftp: losses+=1
 
-		# if team.ast > otherTeam.ast: wins+=1
-		# elif team.ast < otherTeam.ast: losses+=1
+		if team.reb > otherTeam.reb: wins+=1
+		elif team.reb < otherTeam.reb: losses+=1
 
-		# if team.stl > otherTeam.stl: wins+=1
-		# elif team.stl < otherTeam.stl: losses+=1
+		if team.ast > otherTeam.ast: wins+=1
+		elif team.ast < otherTeam.ast: losses+=1
 
-		# if team.blk > otherTeam.blk: wins+=1
-		# elif team.blk < otherTeam.blk: losses+=1
+		if team.stl > otherTeam.stl: wins+=1
+		elif team.stl < otherTeam.stl: losses+=1
 
-		# if team.tov < otherTeam.tov: wins+=1
-		# elif team.tov > otherTeam.tov: losses+=1
+		if team.blk > otherTeam.blk: wins+=1
+		elif team.blk < otherTeam.blk: losses+=1
 
-		# if team.pts > otherTeam.pts: wins+=1
-		# elif team.pts < otherTeam.pts: losses+=1
+		if team.tov < otherTeam.tov: wins+=1
+		elif team.tov > otherTeam.tov: losses+=1
 
-		# return (wins,losses,9-wins-losses)
-		return (wins, losses)
+		if team.pts > otherTeam.pts: wins+=1
+		elif team.pts < otherTeam.pts: losses+=1
+
+		return (wins,losses,9-wins-losses)
+
 
 
 def lookup(name, namespace):

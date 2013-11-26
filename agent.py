@@ -33,7 +33,7 @@ class IntelligentAgent(Agent) :
 	 		return action.playerRank
 
 		if actions :
-			return random.choice(list(nsmallest(20, actions, key=getRank)))
+			return random.choice(list(nsmallest(3, actions, key=getRank)))
 		return None
 
 class FeaturesAgent(Agent) :
@@ -54,19 +54,13 @@ class FeatAgent(FeaturesAgent) :
 		def getWeight(action) :
 			newGameState = gameState.generateSuccessor(action, self.index)
 			return self.evaluationFunction(newGameState, self.evaluationArgs)
-		return max(actions, key=getWeight)
-	"""
-	def getActionWithExploring(self, actions, gameState=None) :
-		def getWeight(action) :
-			newGameState = gameState.generateSuccessor(action, self.index)
-			return self.evaluationFunction(newGameState, self.evaluationArgs)
-		if random.random() < .4:
-			if actions:
-				return random.choice(list(actions))
-			return None
-		else: return max(actions, key=getWeight)
-	"""
-
+		if actions:
+			# if random.random() < .2:
+			# 	return random.choice(list(actions))
+			
+			# else: return max(actions, key=getWeight)
+			return max(actions, key=getWeight)
+		return None
 
 class SearchAgent(Agent):
 
