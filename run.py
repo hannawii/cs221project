@@ -5,7 +5,8 @@ import evalFunctions
 
 def train(numPlayers,depth,numGames=100):
 	alpha = 2e-1
-	numFeats = 20
+	numFeats = len(evalFunctions.extractFeatures(GameState(numPlayers=numPlayers)))
+	print numFeats
 	evalFn = evalFunctions.logLinearEvaluation
 	w = [random.gauss(0,1e-2) for _ in range(numFeats)]
 	w[-1] = 0
@@ -24,18 +25,21 @@ def train(numPlayers,depth,numGames=100):
 			g = nextState
 			for p in players: p.setWeights(w)
 			over = g.isOver()
-			if playernum==0:playernum=1
-			else:playernum=0
+			playernum += 1
+			playernum = playernum % numPlayers
+			# if playernum==0:playernum=1
+			# else:playernum=0
 
 		if g.isWin(): winner=0
-		else: winner=1
+		else: winner=g.getWinner()
 
 		if it%1 == 0:
 			print "Game : %d/%d"%(it,numGames)
 
 		# flip outcome for training
 		print 'winner is {}'.format(winner)
-		w = evalFunctions.TDUpdate(g,None,1-winner,w,alpha)
+		# w = evalFunctions.TDUpdate(g,None,1-winner,w,alpha)
+		w = evalFunctions.TDUpdate(g,None,g.getWinLossMargin(),w,alpha)
 
 	# save weights
 	fid = open("weights.bin",'w')
@@ -49,15 +53,15 @@ def test(numPlayers,depth,w,numGames=50,draw=False):
 	evalFn = evalFunctions.logLinearEvaluation
 	# players.insert(0,ABMinimaxAgent(evalFn,depth=depth,agent=0,evalArgs=w))
 	players.insert(0,FeatAgent(evalFn,depth=depth,agent=0,evalArgs=w))
-	winners = [0,0]
+	winners = [0] * numPlayers
 	for _ in xrange(numGames):
 		g = GameState(numPlayers=numPlayers)
 		winner = run_game(players,g)
 		print "The winner is : Player %s"%winner
 		winners[winner]+=1
 	print "Summary:"
-	print "Player %s : %d/%d"%(0,winners[0],sum(winners))
-	print "Player %s : %d/%d"%(1,winners[1],sum(winners))
+	for i in xrange(numPlayers) :
+		print "Player %s : %d/%d"%(i,winners[i],sum(winners))
 
 def run_game(players,g):
 	over = False
@@ -65,8 +69,8 @@ def run_game(players,g):
 		for playerNum, player in enumerate(players):
 			g=turn(player,playerNum,g)
 			over = g.isOver()
-	if g.isWin(): return 0
-	return 1
+	# if g.isWin(): return 0
+	return g.getWinner()
 
 def turn(player,playerNum,g):
 	actions = g.getLegalActions(playerNum)

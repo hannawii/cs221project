@@ -44,12 +44,18 @@ class GameState:
 				# else :
 				# 	winRecord[gamePlayer] += 1
 				# 	winRecord[opponent] += 1
-		if max(winRecord, key=winRecord.get) == 0 : 
+		state.data.winner = max(winRecord, key=winRecord.get)
+		if state.data.winner == 0 : 
 			state.data._win = True 
 			state.data._lose = False
+			# state.data._win_loss_margin = winRecord[0]
 		else : 
 			state.data._lose = True
 			state.data._win = False
+			# state.data._win_loss_margin = winRecord[0] - winRecord[state.data.winner]
+
+		state.data._win_loss_margin = winRecord[0]
+
 
 	def getNumAgents(self) :
 		return self.data.numPlayers
@@ -66,6 +72,12 @@ class GameState:
 
 	def isOver(self) :
 		return self.data._win or self.data._lose
+
+	def getWinLossMargin(self) :
+		return self.data._win_loss_margin
+
+	def getWinner(self) :
+		return self.data.winner
 
 
 	def __init__( self, prevState = None, numPlayers=5):
@@ -107,6 +119,8 @@ class GameStateData:
 			# self.money = 100
 		self._win = False
 		self._lose = False
+		self.winner = None
+		self._win_loss_margin = None
 
 	# def deepCopy(self) :
 
