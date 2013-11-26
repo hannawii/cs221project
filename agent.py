@@ -11,6 +11,15 @@ class Agent:
 		raise NotImplementedError("Override me")
 	def setWeights(self,w):
 		return None
+	def getActionWithExploring(self, actions, gameState=None):
+		if random.random() < .4:
+			if actions:
+	 			def	getRank(action) :
+	 				return action.playerRank
+				return random.choice(list(nsmallest(5, actions, key=getRank)))
+			return None
+		else: 
+			return self.getAction(actions, gameState)
 
 class RandomAgent(Agent):
 	def getAction(self, actions, gameState=None):
@@ -45,11 +54,18 @@ class FeatAgent(FeaturesAgent) :
 		def getWeight(action) :
 			newGameState = gameState.generateSuccessor(action, self.index)
 			return self.evaluationFunction(newGameState, self.evaluationArgs)
+		return max(actions, key=getWeight)
+	"""
+	def getActionWithExploring(self, actions, gameState=None) :
+		def getWeight(action) :
+			newGameState = gameState.generateSuccessor(action, self.index)
+			return self.evaluationFunction(newGameState, self.evaluationArgs)
 		if random.random() < .4:
 			if actions:
 				return random.choice(list(actions))
 			return None
 		else: return max(actions, key=getWeight)
+	"""
 
 
 class SearchAgent(Agent):

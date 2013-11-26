@@ -3,12 +3,14 @@ from util import *
 from agent import *
 import evalFunctions
 
-def train(numPlayers,depth,numGames=100):
+def train(numPlayers,depth,numGames=100,prevWeights=None):
 	alpha = 2e-1
 	numFeats = 20
 	evalFn = evalFunctions.logLinearEvaluation
-	w = [random.gauss(0,1e-2) for _ in range(numFeats)]
-	w[-1] = 0
+	if prevWeights: w = prevWeights
+	else: 
+		w = [random.gauss(0,1e-2) for _ in range(numFeats)]
+		w[-1] = 0
 
 	for it in xrange(numGames):
 
@@ -19,13 +21,13 @@ def train(numPlayers,depth,numGames=100):
 		over = False
 		playernum=0
 		while not over:
-			nextState=turn(players[playernum],playernum,g)
+			nextState=turn(players[playernum],playernum,g,explore=True)
 			w = evalFunctions.TDUpdate(g,nextState,0,w,alpha)
 			g = nextState
 			for p in players: p.setWeights(w)
 			over = g.isOver()
-			if playernum==0:playernum=1
-			else:playernum=0
+			playernum+=1
+			playernum%=numPlayers
 
 		if g.isWin(): winner=0
 		else: winner=1
@@ -49,6 +51,7 @@ def test(numPlayers,depth,w,numGames=50,draw=False):
 	evalFn = evalFunctions.logLinearEvaluation
 	# players.insert(0,ABMinimaxAgent(evalFn,depth=depth,agent=0,evalArgs=w))
 	players.insert(0,FeatAgent(evalFn,depth=depth,agent=0,evalArgs=w))
+	#players.insert(0,IntelligentAgent())
 	winners = [0,0]
 	for _ in xrange(numGames):
 		g = GameState(numPlayers=numPlayers)
@@ -68,12 +71,13 @@ def run_game(players,g):
 	if g.isWin(): return 0
 	return 1
 
-def turn(player,playerNum,g):
+def turn(player,playerNum,g,explore=False):
 	actions = g.getLegalActions(playerNum)
 	#print [action.playerName for action in actions]
 	# print actions
 	if actions: 
-		action = player.getAction(actions,g)
+		if explore and playerNum==0: action = player.getActionWithExploring(actions,g) #If we change draft order update this!!!
+		else: action = player.getAction(actions,g)
 		print '{} drafts {}'.format(playerNum,action.playerName)
 	else: action = None
 	if action: g=g.generateSuccessor(action, playerNum)
@@ -103,8 +107,9 @@ def main(args=None):
 	depth = int(opts.depth)
 
 	weights=None
+	weights=load_weights(weights)
 	if opts.train:
-		weights=train(numPlayers,depth)
+		weights=train(numPlayers,depth,prevWeights=weights)
 
 	if opts.eval:
 		weights = load_weights(weights)
